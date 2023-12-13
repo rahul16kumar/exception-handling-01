@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>a6afe457-932e-4888-b29f-c25bc1a9655f</groupId>
+	<artifactId>exception-handling-01</artifactId>
+	<version>1.0.2</version>
+
+	<name>exception-handling-01</name>
+	<description>exception-handling-01</description>
+
+	<packaging>mule-policy</packaging>
+
+	<properties>
+		<mule.maven.plugin.version>3.8.2</mule.maven.plugin.version>
+		<exchange.url>https://maven.anypoint.mulesoft.com/api/v1/organizations/a6afe457-932e-4888-b29f-c25bc1a9655f/maven</exchange.url>
+		<httpPolicyTransformVersion>3.1.0</httpPolicyTransformVersion>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.mulesoft.anypoint</groupId>
+			<artifactId>mule-http-policy-transform-extension</artifactId>
+			<version>${httpPolicyTransformVersion}</version>
+			<classifier>mule-plugin</classifier>
+			<exclusions>
+				<exclusion>
+					<groupId>org.mule.connectors</groupId>
+					<artifactId>mule-http-connector</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.mule.tools.maven</groupId>
+				<artifactId>mule-maven-plugin</artifactId>
+				<version>${mule.maven.plugin.version}</version>
+				<extensions>true</extensions>
+			</plugin>
+			<plugin>
+				<groupId>org.mule.tools.maven</groupId>
+				<artifactId>exchange-mule-maven-plugin</artifactId>
+				<version>0.0.15</version>
+				<executions>
+					<execution>
+						<id>validate</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>exchange-pre-deploy</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<distributionManagement>
+		<repository>
+			<id>anypoint-exchange-v3</id>
+			<name>Anypoint Exchange</name>
+			<url>https://maven.anypoint.mulesoft.com/api/v3/organizations/${project.groupId}/maven</url>
+			<layout>default</layout>
+		</repository>
+	</distributionManagement>
+
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>mulesoft-releases</id>
+			<name>mulesoft release repository</name>
+			<layout>default</layout>
+			<url>https://repository.mulesoft.org/releases/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>mule-public</id>
+			<url>https://repository.mulesoft.org/nexus/content/repositories/releases</url>
+		</pluginRepository>
+	</pluginRepositories>
+	<repositories>
+		<repository>
+			<id>anypoint-exchange-v3</id>
+			<name>Anypoint Exchange V3</name>
+			<url>https://maven.anypoint.mulesoft.com/api/v3/maven</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
+</project>

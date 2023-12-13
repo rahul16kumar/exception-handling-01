@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:http-transform="http://www.mulesoft.org/schema/mule/http-policy-transform"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:http-policy="http://www.mulesoft.org/schema/mule/http-policy"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+               http://www.mulesoft.org/schema/mule/http-policy http://www.mulesoft.org/schema/mule/http-policy/current/mule-http-policy.xsd
+               http://www.mulesoft.org/schema/mule/http-policy-transform http://www.mulesoft.org/schema/mule/http-policy-transform/current/mule-http-policy-transform.xsd">
+
+
+	<http-policy:proxy
+		name="{{{policyId}}}-custom-policy">
+		<http-policy:source>
+			<try doc:name="Try" doc:id="78f717d1-aaf1-487a-b905-6f716f5a439f">
+				<logger level="INFO" doc:name="Logger"
+					doc:id="1bb9cc9f-c3d0-4392-bbb4-9a03fb6a7dc9"
+					message="Logger from Custom Policy." />
+				<raise-error doc:name="Raise error"
+					doc:id="5115e90e-cc3a-4dca-8431-06c0ed902b3e" type="APP:CUSTOM"
+					description="This is an error generated at policy level." />
+				<error-handler>
+					<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="c7b3cbd1-9255-41c6-a90e-73ef58996be3" type="ANY">
+						<logger level="ERROR" doc:name="Logger"
+							doc:id="42596be2-53a0-4d5b-af35-e51bd39f44d9"
+							message="{{{policyId}}}: Error - #[error.errorType] - #[error.description]" />
+						<http-transform:set-response
+							statusCode="200">
+							<http-transform:body>#['Application Exception occured in custom policy: ' ++ error.description]</http-transform:body>
+						</http-transform:set-response>
+					</on-error-propagate>
+				</error-handler>
+			</try>
+			<http-policy:execute-next />
+			<set-payload
+				value="Payload from Custom Policy after executing API call." />
+		</http-policy:source>
+	</http-policy:proxy>
+</mule>
